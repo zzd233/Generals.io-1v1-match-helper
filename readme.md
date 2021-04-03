@@ -34,7 +34,7 @@ It's not guaranteed that you will exactly match the people you want to play with
 
 If you find any issues or have any suggestions, just tell me, thanks!
 
-* If you can't load the tool, that really terrible. Turn to the browser's console to see if some error was thrown.
+* If you can't load the tool, that's really terrible. Turn to the browser's console to see if some error was thrown.
 * Turn to the browser's console and see the time costed for data-fetching. If it often exceed 3000, that means your network is not good enough and I may do sth to improve the data-fetching process.
 * ......
 
