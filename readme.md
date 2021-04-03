@@ -6,8 +6,6 @@ The purpose is to make top players have better experience while playing 1v1.
 
 Friend list is put in localStorage, so the list won't be lost after refreshing the page.
 
-I have tested this script **in chrome**, but not in other browsers. You can have a try if you want.
-
 # More Information
 
 If you have successfully install the script, when you open the main game page, you will find sth like what the picture below showed.
