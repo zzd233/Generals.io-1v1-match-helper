@@ -384,7 +384,7 @@ window.onload = async () => {
 				if (tasks == 0){
 					clearInterval(checkfetchendinterval);
 					let now = Number(new Date());
-					console.log(`fetchs: time = ${now - time_0}`);
+					console.log(`fetch: time = ${now - time_0}`);
 					let pool = [];
 					if (enable_friends)
 						for (let name of friend_list){
