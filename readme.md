@@ -8,3 +8,5 @@ Also, it can't guarantee that you will match the people you what to play with (b
 Friend list is put in localStorage, so the list won't be lost after refreshing the page.
 
 I have tested this script **in chrome**, but not in other browsers. You can have a try if you want.
+
+Don't add too much friend in the list because I don't know whether your network can bear or not.
