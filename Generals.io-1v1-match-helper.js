@@ -173,7 +173,7 @@ async function load_elements(){
 			<div>
 				Modify friend: &nbsp;
 			</div>
-			<input id = "addfriend" placeholder = "anyone"> &nbsp;
+			<input id = "addfriend" placeholder = "someone"> &nbsp;
 			<div id = "button4">
 				Add/Del
 			</div>
