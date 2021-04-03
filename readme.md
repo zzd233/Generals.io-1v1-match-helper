@@ -17,6 +17,7 @@ If you have successfully install the script, when you open the main game page, y
 ## Finding range
 
 Leaderboard: star > x   OFF/ON: If you correctly entered value x and turn the corresponding button on, some information about people from leaderboard whose star > x will be displayed in the display area.
+
 Friend: OFF/ON: If you turn this button on, your friends' information will be displayed with light blue background.
 
 ## Modify Friends
