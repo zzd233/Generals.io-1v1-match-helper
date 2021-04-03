@@ -397,6 +397,8 @@ window.onload = async () => {
 						}
 					if (enable_leaderboard){
 						for (let name of players_from_leaderboard){
+							if (!name)
+								continue;
 							if ((friend_dictionary[name] === true && enable_friends) || !(data[name].star > bound) || name === myname || !name)
 								continue;
 							if (isNaN(data[name].time) || now - data[name].time > 1000 * 60 * 10)
