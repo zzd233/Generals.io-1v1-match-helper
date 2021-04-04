@@ -198,11 +198,9 @@ const INTERVAL = 3000, Eps = 1e-3;
 let myname;
 let data = {};//store other's star and last 1v1 game time; example: data["zzd233"] = {star: 70.00, time: 1617360510077} 
 let friend_dictionary = {};
-window.onload = async () => {
+let main = () => {
 	setTimeout(async () => {
-		let lib_jquery = 'https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js';
 		let lib_socket = 'https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js';
-		await load(lib_jquery);
 		await load(lib_socket);
 		await load_elements();
 		socket = io('http://ws.generals.io');
@@ -485,3 +483,10 @@ window.onload = async () => {
 		}, INTERVAL);
 	}, 1000);
 };
+
+let checkready = setInterval(() => {
+	if (document.readyState === "complete"){
+		main();
+		clearInterval(checkready);
+	}
+}, 250);
