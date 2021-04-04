@@ -324,7 +324,7 @@ let main = () => {
 				else {
 					console.log("name = ",name,"star = ",current_star, data[name]);
 					tasks++;
-					url = 'http://generals.io/api/replaysForUsername?u=' + encodeURIComponent(name) + '&offset=0&count=1';
+					let url = 'http://generals.io/api/replaysForUsername?u=' + encodeURIComponent(name) + '&offset=0&count=1';
 					fetch(url).then(tmp => {
 						return tmp.json();
 					}).then(tmp => {
