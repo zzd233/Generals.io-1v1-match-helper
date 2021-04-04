@@ -346,26 +346,31 @@ let main = () => {
 				bound = Infinity;
 			bound -= Eps;
 			let players_from_leaderboard = [];
-			if (enable_friends){
-				for (let name of friend_list){
-					tasks++;
-					let url = 'http://generals.io/api/starsAndRanks?u=' + encodeURIComponent(name);
-					fetch(url).then(tmp => {
-						return tmp.json();
-					}).then(tmp => {
-						let star = parseFloat(tmp.stars.duel).toFixed(2);
-						if (isNaN(star))
-							star = 0;
-						update_player(name, star);
-						tasks--;
-					});
+			tasks++;
+			socket.emit('leaderboard', 'duel', (res) => {
+				// console.log(res);
+				let stars = res.stars, users = res.users;
+				if (enable_friends){
+					for (let name of friend_list){
+						let index = users.findIndex(x => x === name);
+						if (index === -1){
+							tasks++;
+							let url = 'http://generals.io/api/starsAndRanks?u=' + encodeURIComponent(name);
+							fetch(url).then(tmp => {
+								return tmp.json();
+							}).then(tmp => {
+								let star = parseFloat(tmp.stars.duel).toFixed(2);
+								if (isNaN(star))
+									star = 0;
+								update_player(name, star);
+								tasks--;
+							});
+						} else {
+							update_player(name, parseFloat(stars[index]).toFixed(2));
+						}
+					}
 				}
-			}
-			if (enable_leaderboard){
-				tasks++;
-				socket.emit('leaderboard', 'duel', (res) => {
-					// console.log(res);
-					let stars = res.stars, users = res.users;
+				if (enable_leaderboard){
 					players_from_leaderboard = users;
 					if (!leaderboard_initialized){
 						leaderboard_initialized = true;
@@ -387,9 +392,9 @@ let main = () => {
 							update_player(users[i], parseFloat(stars[i]).toFixed(2));
 						}
 					}
-					tasks--;
-				});
-			}
+				}
+				tasks--;
+			});
 			let time_0 = Number(new Date());
 			let checkfetchendinterval = setInterval(()=>{
 				if (tasks == 0){
