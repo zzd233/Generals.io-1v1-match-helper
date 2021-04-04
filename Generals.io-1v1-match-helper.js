@@ -312,7 +312,7 @@ let main = () => {
 		let leaderboard_initialized = false;
 		setInterval(async () => {
 			let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
-			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again")){
+			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
 				option_element.hidden = list_element.hidden = true;
 				return;
 			}
