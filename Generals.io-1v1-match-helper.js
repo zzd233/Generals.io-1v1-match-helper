@@ -363,8 +363,14 @@ let main = () => {
 					if (!leaderboard_initialized){
 						leaderboard_initialized = true;
 						for (let i = 0; i < stars.length; i++){
-							if (!data[users[i]])
-								data[users[i]] = {star: parseFloat(stars[i]).toFixed(2), time: NaN};
+							if (!users[i])
+								continue;
+							if (!data[users[i]]){
+								if (friend_dictionary[users[i]])
+									update_player(users[i],parseFloat(stars[i]).toFixed(2));
+								else
+									data[users[i]] = {star: parseFloat(stars[i]).toFixed(2), time: NaN};
+							}
 						}
 						tasks--;
 						return;
