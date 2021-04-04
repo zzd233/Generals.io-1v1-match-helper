@@ -329,10 +329,12 @@ let main = () => {
 						return tmp.json();
 					}).then(tmp => {
 						if (!tmp || !tmp.length){
-							throw "cant find any replays for user " + name;
+							data[name] = {star: 0, time: NaN};
+							// throw "cant find any replays for user " + name;
+						} else {
+							tmp = tmp[0];
+							data[name] = {star: current_star, time: tmp.type === '1v1' ? tmp.started + (tmp.turns - 1) * 500 : NaN};
 						}
-						tmp = tmp[0];
-						data[name] = {star: current_star, time: tmp.type === '1v1' ? tmp.started + (tmp.turns - 1) * 500 : NaN};
 						tasks--;
 					});
 				}
