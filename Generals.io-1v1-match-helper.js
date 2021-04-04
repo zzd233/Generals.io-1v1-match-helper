@@ -137,8 +137,13 @@ async function load_elements(){
 
 	.friendcell {
 		background-color: #BCF;
+		color: black;
 	}
 
+	.links {
+		color: black;
+	}
+	
 	`;
 	c.rel = "stylesheet";
 	document.body.appendChild(c);
@@ -451,7 +456,7 @@ let main = () => {
 						htmlstring += `
 							<div class = "table_row">
 								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
-									${user.name}
+									<a class = "links" href = "http://generals.io/profiles/${encodeURIComponent(user.name)}" target = "_blank">${user.name}</a>
 								</div>
 								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
 									${user.star}
