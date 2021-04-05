@@ -415,7 +415,7 @@ let main = () => {
 						for (let name of players_from_leaderboard){
 							if (!name)
 								continue;
-							if ((friend_dictionary[name] === true && enable_friends) || !(data[name].star > bound) || name === myname || !name)
+							if ((friend_dictionary[name] === true && enable_friends) || !data[name] || !(data[name].star > bound) || name === myname)
 								continue;
 							if (isNaN(data[name].time) || now - data[name].time > 1000 * 60 * 10)
 								continue;
