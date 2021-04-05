@@ -417,7 +417,7 @@ let main = () => {
 								continue;
 							if ((friend_dictionary[name] === true && enable_friends) || !data[name] || !(data[name].star > bound) || name === myname)
 								continue;
-							if (isNaN(data[name].time) || now - data[name].time > 1000 * 60 * 120)
+							if (isNaN(data[name].time) || now - data[name].time > 1000 * 60 * 30)
 								continue;
 							pool.push({
 								name: name,
