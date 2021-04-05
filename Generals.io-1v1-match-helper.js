@@ -34,7 +34,7 @@ async function load_elements(){
 		background-color: #222;
 	}
 	
-	#option, #list {
+	#option, #list, #title{
 		-moz-user-select: none;
 		-webkit-user-select: none;
 		-ms-user-select: none;
@@ -47,9 +47,17 @@ async function load_elements(){
 		position: absolute;
 	}
 	
+	#title {
+		right: 80px;
+		top: 55px;
+		width: 350px;
+		height: 30px;
+		padding: 5px 10px 0px 10px;
+	}
+
 	#option {
 		right: 80px;
-		top: 100px;
+		top: 110px;
 		width: 350px;
 		height: 200px;
 		padding: 10px 10px 10px 10px;
@@ -143,52 +151,59 @@ async function load_elements(){
 	.links {
 		color: black;
 	}
+
+	#titlelink {
+		
+	}
 	
 	`;
 	c.rel = "stylesheet";
 	document.body.appendChild(c);
 	let d = document.createElement("div");
 	d.innerHTML = `
+		<div id = "title">
+			<a class = "links" id = "titlelink" href = "https://github.com/zzd233/Generals.io-1v1-match-helper" target = "_blank">Generals.io 1v1 match helper</a>
+		</div>
 		<div id = "option">
-		<div id = "range">
-			<div>
-				Finding range:
-			</div>
-			<div id = "enable_leaderboard">
+			<div id = "range">
 				<div>
-					&nbsp; Leaderboard: star ≥
+					Finding range:
 				</div>
-				<input id = "match-starbound" placeholder = "inf"> &nbsp;
-				<div class = "button" id = "button2">OFF</div>
+				<div id = "enable_leaderboard">
+					<div>
+						&nbsp; Leaderboard: star ≥
+					</div>
+					<input id = "match-starbound" placeholder = "inf"> &nbsp;
+					<div class = "button" id = "button2">OFF</div>
+				</div>
+				<div id = "enable_friends">
+					<div>
+						&nbsp; Friends: &nbsp;
+					</div>
+					<div class = "button" id = "button3">OFF</div>
+				</div>
 			</div>
-			<div id = "enable_friends">
+			<div id = "enable_match">
 				<div>
-					&nbsp; Friends: &nbsp;
+					Auto Match:&nbsp;
 				</div>
-				<div class = "button" id = "button3">OFF</div>
+				<div class = "button" id = "button1">OFF</div>
+			</div>
+			<div id = "new_friend">
+				<div>
+					Modify friend: &nbsp;
+				</div>
+				<input id = "addfriend" placeholder = "someone"> &nbsp;
+				<div id = "button4">
+					Add/Del
+				</div>
 			</div>
 		</div>
-		<div id = "enable_match">
-			<div>
-				Auto Match:&nbsp;
-			</div>
-			<div class = "button" id = "button1">OFF</div>
-		</div>
-		<div id = "new_friend">
-			<div>
-				Modify friend: &nbsp;
-			</div>
-			<input id = "addfriend" placeholder = "someone"> &nbsp;
-			<div id = "button4">
-				Add/Del
+		<div id = "list">
+			<div id = "list-table">
+				
 			</div>
 		</div>
-	</div>
-	<div id = "list">
-		<div id = "list-table">
-			
-		</div>
-	</div>
 	`;
 	document.body.appendChild(d);
 }
