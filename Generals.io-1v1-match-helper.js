@@ -34,7 +34,7 @@ async function load_elements(){
 		background-color: #222;
 	}
 	
-	#option, #list, #title{
+	#option, #list{
 		-moz-user-select: none;
 		-webkit-user-select: none;
 		-ms-user-select: none;
@@ -46,10 +46,12 @@ async function load_elements(){
 		border-radius: 5px;
 		position: absolute;
 	}
-	
+
 	#title {
+		position: absolute;
+		font-size: 24px;
 		right: 80px;
-		top: 55px;
+		top: 70px;
 		width: 350px;
 		height: 30px;
 		padding: 5px 10px 0px 10px;
@@ -153,7 +155,9 @@ async function load_elements(){
 	}
 
 	#titlelink {
-		
+		color: white;
+		text-shadow: 2px 2px teal;
+		font-family: Quicksand-Bold;
 	}
 	
 	`;
@@ -162,7 +166,7 @@ async function load_elements(){
 	let d = document.createElement("div");
 	d.innerHTML = `
 		<div id = "title">
-			<a class = "links" id = "titlelink" href = "https://github.com/zzd233/Generals.io-1v1-match-helper" target = "_blank">Generals.io 1v1 match helper</a>
+			<a id = "titlelink" href = "https://github.com/zzd233/Generals.io-1v1-match-helper" target = "_blank">Generals.io 1v1 match helper</a>
 		</div>
 		<div id = "option">
 			<div id = "range">
