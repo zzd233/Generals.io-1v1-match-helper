@@ -165,47 +165,49 @@ async function load_elements(){
 	document.body.appendChild(c);
 	let d = document.createElement("div");
 	d.innerHTML = `
-		<div id = "title">
-			<a id = "titlelink" href = "https://github.com/zzd233/Generals.io-1v1-match-helper" target = "_blank">Generals.io 1v1 match helper</a>
-		</div>
-		<div id = "option">
-			<div id = "range">
-				<div>
-					Finding range:
-				</div>
-				<div id = "enable_leaderboard">
+		<div id = "all">
+			<div id = "title">
+				<a id = "titlelink" href = "https://github.com/zzd233/Generals.io-1v1-match-helper" target = "_blank">Generals.io 1v1 match helper</a>
+			</div>
+			<div id = "option">
+				<div id = "range">
 					<div>
-						&nbsp; Leaderboard: star ≥
+						Finding range:
 					</div>
-					<input id = "match-starbound" placeholder = "inf"> &nbsp;
-					<div class = "button" id = "button2">OFF</div>
+					<div id = "enable_leaderboard">
+						<div>
+							&nbsp; Leaderboard: star ≥
+						</div>
+						<input id = "match-starbound" placeholder = "inf"> &nbsp;
+						<div class = "button" id = "button2">OFF</div>
+					</div>
+					<div id = "enable_friends">
+						<div>
+							&nbsp; Friends: &nbsp;
+						</div>
+						<div class = "button" id = "button3">OFF</div>
+					</div>
 				</div>
-				<div id = "enable_friends">
+				<div id = "enable_match">
 					<div>
-						&nbsp; Friends: &nbsp;
+						Auto Match:&nbsp;
 					</div>
-					<div class = "button" id = "button3">OFF</div>
+					<div class = "button" id = "button1">OFF</div>
+				</div>
+				<div id = "new_friend">
+					<div>
+						Modify friend: &nbsp;
+					</div>
+					<input id = "addfriend" placeholder = "someone"> &nbsp;
+					<div id = "button4">
+						Add/Del
+					</div>
 				</div>
 			</div>
-			<div id = "enable_match">
-				<div>
-					Auto Match:&nbsp;
+			<div id = "list">
+				<div id = "list-table">
+					
 				</div>
-				<div class = "button" id = "button1">OFF</div>
-			</div>
-			<div id = "new_friend">
-				<div>
-					Modify friend: &nbsp;
-				</div>
-				<input id = "addfriend" placeholder = "someone"> &nbsp;
-				<div id = "button4">
-					Add/Del
-				</div>
-			</div>
-		</div>
-		<div id = "list">
-			<div id = "list-table">
-				
 			</div>
 		</div>
 	`;
@@ -332,10 +334,10 @@ let main = () => {
 		setInterval(async () => {
 			let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
 			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
-				option_element.hidden = list_element.hidden = true;
+				document.getElementById("all").hidden = true;
 				return;
 			}
-			option_element.hidden = list_element.hidden = false;
+			document.getElementById("all").hidden = false;
 			let tasks = 0;
 			async function update_player(name, current_star){
 				if (data[name] != undefined && abs(current_star - data[name].star) < 0.01)
