@@ -221,7 +221,7 @@ let enable_leaderboard = false;
 let enable_friends = false;
 let friend_list = [];
 const INTERVAL = 3000, Eps = 1e-3;
-let myname;
+let myname = undefined;
 let data = {};//store other's star and last 1v1 game time; example: data["zzd233"] = {star: 70.00, time: 1617360510077} 
 let friend_dictionary = {};
 let main = () => {
@@ -234,12 +234,10 @@ let main = () => {
 		console.log('connected');
 		function get_myname(){
 			let tmp = document.getElementById('main-menu-username-input');
-			if (!tmp)
-				return undefined;
-			else
-				return tmp.value;
+			if (tmp)
+				myname = tmp.value;
 		}
-		myname = get_myname();
+		get_myname();
 		button1 = document.getElementById('button1');
 		button2 = document.getElementById('button2');
 		button3 = document.getElementById('button3');
@@ -345,7 +343,7 @@ let main = () => {
 				return;
 			}
 			document.getElementById("all").hidden = false;
-			myname = get_myname();
+			get_myname();
 			let tasks = 0;
 			async function update_player(name, current_star){
 				if (data[name] != undefined && abs(current_star - data[name].star) < 0.01)
