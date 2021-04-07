@@ -232,7 +232,14 @@ let main = () => {
 		socket = io('http://ws.generals.io');
 		await waitConnect();
 		console.log('connected');
-		myname = document.getElementById('main-menu-username-input').value;
+		function get_myname(){
+			let tmp = document.getElementById('main-menu-username-input');
+			if (!tmp)
+				return undefined;
+			else
+				return tmp.value;
+		}
+		myname = get_myname();
 		button1 = document.getElementById('button1');
 		button2 = document.getElementById('button2');
 		button3 = document.getElementById('button3');
@@ -338,6 +345,7 @@ let main = () => {
 				return;
 			}
 			document.getElementById("all").hidden = false;
+			myname = get_myname();
 			let tasks = 0;
 			async function update_player(name, current_star){
 				if (data[name] != undefined && abs(current_star - data[name].star) < 0.01)
