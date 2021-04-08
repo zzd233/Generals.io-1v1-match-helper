@@ -415,7 +415,7 @@ let main = () => {
 						return;
 					}
 					for (let i = 0; i < stars.length; i++) {
-						if (users[i] && stars[i] > bound && (friend_dictionary[users[i]] !== true || !enable_friends)){
+						if (users[i] && (friend_dictionary[users[i]] !== true || !enable_friends)){
 							update_player(users[i], parseFloat(stars[i]).toFixed(2));
 						}
 					}
