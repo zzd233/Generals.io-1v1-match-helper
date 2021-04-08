@@ -7,7 +7,7 @@
 // @match        http://generals.io/
 // @grant        none
 // ==/UserScript==
-let abs = Math.abs;
+let abs = Math.abs, max = Math.max, min = Math.min;
 function load(src) {
 	return new Promise((resolve, reject) => {
 		let c = document.createElement('script');
@@ -34,33 +34,33 @@ async function load_elements(){
 		background-color: #222;
 	}
 	
-	#option, #list{
+	#all {
 		-moz-user-select: none;
 		-webkit-user-select: none;
 		-ms-user-select: none;
 		-khtml-user-select: none;
 		user-select: none;
+		z-index: 9999;
+		position: absolute;
+		top: 70px;
+	}
+
+	#option, #list {
 		font-size: 20px;
 		background-color: white;
 		border: purple solid 5px;
 		border-radius: 5px;
-		position: absolute;
 	}
 
 	#title {
-		position: absolute;
 		font-size: 24px;
-		right: 80px;
-		top: 70px;
-		width: 350px;
 		height: 30px;
 		padding: 5px 10px 0px 10px;
+		text-align: center;
 	}
 
 	#option {
-		right: 80px;
-		top: 110px;
-		width: 350px;
+		margin-top: 5px;
 		height: 200px;
 		padding: 10px 10px 10px 10px;
 	}
@@ -72,10 +72,8 @@ async function load_elements(){
 	}
 	
 	#list {
+		margin-top: 10px;
 		font-size: 18px;
-		right: 80px;
-		top: 350px;
-		width: 350px;
 		height: 400px;
 		padding: 10px 10px 10px 10px;
 		overflow-y: scroll;
@@ -165,7 +163,7 @@ async function load_elements(){
 	document.body.appendChild(c);
 	let d = document.createElement("div");
 	d.innerHTML = `
-		<div id = "all">
+		<div id = "all" hidden = "true">
 			<div id = "title">
 				<a id = "titlelink" href = "https://github.com/zzd233/Generals.io-1v1-match-helper" target = "_blank">Generals.io 1v1 match helper</a>
 			</div>
@@ -213,7 +211,7 @@ async function load_elements(){
 	`;
 	document.body.appendChild(d);
 }
-let button1, button2, button3, button4, option_element, list_element;
+let main_div, button1, button2, button3, button4, option_element, list_element;
 let match_starbound, addfriend;
 let list_table;
 let enable_match = false;
@@ -224,7 +222,42 @@ const INTERVAL = 3000, Eps = 1e-3;
 let myname = undefined;
 let data = {};//store other's star and last 1v1 game time; example: data["zzd233"] = {star: 70.00, time: 1617360510077} 
 let friend_dictionary = {};
-let main = () => {
+function px2int(s){
+	return parseInt(s.substr(0, s.length - 2));
+}
+function int2px(a){
+	return `${a}px`;
+}
+function load_drag(box, callback = () => {}){
+	let isdrag = false, x, y;
+	box.onmousedown = (event) => {
+		event = event || window.event;
+		x = event.clientX;
+		y = event.clientY;
+		isdrag = true;
+	}
+	document.onmousemove = (event) => {
+		if (!isdrag)
+			return;
+		console.log(event.button);
+		event = event || window.event;
+		let dx = event.clientX - x;
+		let dy = event.clientY - y;
+		x = event.clientX;
+		y = event.clientY;
+		let nx = px2int(box.style.right) - dx;
+		let ny = px2int(box.style.top) + dy;
+		nx = max(20 - box.offsetWidth, min(nx, document.body.offsetWidth - 20));
+		ny = max(20 - box.offsetHeight, min(ny, document.body.offsetHeight - 20));
+		box.style.right = int2px(nx);
+		box.style.top = int2px(ny);
+		callback();
+	}
+	document.onmouseup = (event) => {
+		isdrag = false;
+	}
+}
+function main(){
 	setTimeout(async () => {
 		let lib_socket = 'https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js';
 		await load(lib_socket);
@@ -238,6 +271,20 @@ let main = () => {
 				myname = tmp.value;
 		}
 		get_myname();
+		main_div = document.getElementById('all');
+		let local_main_div_position = JSON.parse(localStorage.getItem("zzdscript_main_div_position"));
+		if (!local_main_div_position){
+			local_main_div_position = {x: 80, y: 70};
+			localStorage.setItem("zzdscript_main_div_position", JSON.stringify(local_main_div_position));
+		}
+		main_div.style.right = int2px(local_main_div_position.x);
+		main_div.style.top = int2px(local_main_div_position.y);
+		load_drag(main_div, () => {
+			localStorage.setItem("zzdscript_main_div_position", JSON.stringify({
+				x: px2int(main_div.style.right),
+				y: px2int(main_div.style.top),
+			}));
+		});
 		button1 = document.getElementById('button1');
 		button2 = document.getElementById('button2');
 		button3 = document.getElementById('button3');
@@ -339,10 +386,10 @@ let main = () => {
 		setInterval(async () => {
 			let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
 			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
-				document.getElementById("all").hidden = true;
+				main_div.hidden = true;
 				return;
 			}
-			document.getElementById("all").hidden = false;
+			main_div.hidden = false;
 			get_myname();
 			let tasks = 0;
 			async function update_player(name, current_star){
