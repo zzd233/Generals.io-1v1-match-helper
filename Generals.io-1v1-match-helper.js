@@ -382,7 +382,12 @@ function main(){
 			addfriend.value = "";
 			localStorage.setItem("zzdscript_Friends", JSON.stringify(friend_list));
 		});
-		let leaderboard_initialized = false;
+		let leaderboard_initialized = false, leaderboard_cnt = 0;
+		let NOREPLAY = "";
+		let ONEVONE = "1v1";
+		let FFA = "FFA";
+		let TWOVTWO = "2v2";
+		let CUSTOM = "custom";
 		setInterval(async () => {
 			let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
 			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
@@ -403,11 +408,19 @@ function main(){
 						return tmp.json();
 					}).then(tmp => {
 						if (!tmp || !tmp.length){
-							data[name] = {star: 0, time: NaN};
+							data[name] = {star: 0, time: NaN, type: NOREPLAY};
 							// throw "cant find any replays for user " + name;
 						} else {
 							tmp = tmp[0];
 							data[name] = {star: current_star, time: tmp.type === '1v1' ? tmp.started + (tmp.turns - 1) * 500 : NaN};
+							if (tmp.type === '1v1')
+								data[name].type = ONEVONE;
+							else if (tmp.type === '2v2')
+								data[name].type = TWOVTWO;
+							else if (tmp.type === 'classic')
+								data[name].type = FFA;
+							else if (tmp.type === 'custom')
+								data[name].type = CUSTOM;
 						}
 						tasks--;
 					});
@@ -455,14 +468,18 @@ function main(){
 								if (friend_dictionary[users[i]])
 									update_player(users[i],parseFloat(stars[i]).toFixed(2));
 								else
-									data[users[i]] = {star: parseFloat(stars[i]).toFixed(2), time: NaN};
+									data[users[i]] = {star: parseFloat(stars[i]).toFixed(2), time: NaN, type: NOREPLAY};
 							}
 						}
 						tasks--;
 						return;
 					}
+					const step = 2;
+					leaderboard_cnt += step;
 					for (let i = 0; i < stars.length; i++) {
 						if (users[i] && (friend_dictionary[users[i]] !== true || !enable_friends)){
+							if (leaderboard_cnt - step < i && i <= leaderboard_cnt)
+								data[users[i]] = undefined;
 							update_player(users[i], parseFloat(stars[i]).toFixed(2));
 						}
 					}
@@ -483,6 +500,7 @@ function main(){
 								star: data[name].star,
 								time_past: isNaN(data[name].time) ? NaN : now - data[name].time,
 								isfriend: true,
+								type: data[name].type,
 							});
 						}
 					if (enable_leaderboard){
@@ -498,13 +516,15 @@ function main(){
 								star: data[name].star,
 								time_past: isNaN(data[name].time) ? NaN : now - data[name].time,
 								isfriend: false,
+								type: data[name].type,
 							});
 						}
 					}
 					pool.sort((a, b) => {
 						let [x, y] = [a.time_past, b.time_past];
-						if (isNaN(x) && isNaN(y))
-							return 0;
+						if (isNaN(x) && isNaN(y)) {
+							return b.star - a.star;
+						}
 						if (isNaN(x) !== isNaN(y))
 							return isNaN(x) ? 1 : -1;
 						return x - y;
@@ -543,7 +563,7 @@ function main(){
 									${user.star}
 								</div>
 								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
-									${time_past_to_string(user.time_past)}
+									${isNaN(user.time_past) ? user.type : time_past_to_string(user.time_past)}
 								</div>
 							</div>
 						`;
