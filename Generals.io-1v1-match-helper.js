@@ -4,7 +4,7 @@
 // @version      1.0
 // @description  A tool for 1v1 to get stars
 // @author       zzd233
-// @match        http://generals.io/
+// @match        https://generals.io/
 // @grant        none
 // ==/UserScript==
 let abs = Math.abs, max = Math.max, min = Math.min;
