@@ -262,7 +262,7 @@ function main(){
 		let lib_socket = 'https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js';
 		await load(lib_socket);
 		await load_elements();
-		socket = io('http://ws.generals.io');
+		socket = io('https://ws.generals.io');
 		await waitConnect();
 		console.log('connected');
 		function get_myname(){
@@ -403,7 +403,7 @@ function main(){
 				else {
 					console.log("name = ",name,"star = ",current_star, data[name]);
 					tasks++;
-					let url = 'http://generals.io/api/replaysForUsername?u=' + encodeURIComponent(name) + '&offset=0&count=1';
+					let url = 'https://generals.io/api/replaysForUsername?u=' + encodeURIComponent(name) + '&offset=0&count=1';
 					fetch(url).then(tmp => {
 						return tmp.json();
 					}).then(tmp => {
@@ -442,7 +442,7 @@ function main(){
 						let index = users.findIndex(x => x === name);
 						if (index === -1){
 							tasks++;
-							let url = 'http://generals.io/api/starsAndRanks?u=' + encodeURIComponent(name);
+							let url = 'https://generals.io/api/starsAndRanks?u=' + encodeURIComponent(name);
 							fetch(url).then(tmp => {
 								return tmp.json();
 							}).then(tmp => {
@@ -557,7 +557,7 @@ function main(){
 						htmlstring += `
 							<div class = "table_row">
 								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
-									<a class = "links" href = "http://generals.io/profiles/${encodeURIComponent(user.name)}" target = "_blank">${user.name}</a>
+									<a class = "links" href = "https://generals.io/profiles/${encodeURIComponent(user.name)}" target = "_blank">${user.name}</a>
 								</div>
 								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
 									${user.star}
