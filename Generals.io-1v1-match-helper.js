@@ -260,7 +260,9 @@ function load_drag(box, callback = () => {}){
 function main(){
 	setTimeout(async () => {
 		let lib_socket = 'https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js';
+		let lib_jquery = 'https://code.jquery.com/jquery-3.6.0.min.js';
 		await load(lib_socket);
+		await load(lib_jquery);
 		await load_elements();
 		socket = io('https://ws.generals.io');
 		await waitConnect();
@@ -388,6 +390,11 @@ function main(){
 		let FFA = "FFA";
 		let TWOVTWO = "2v2";
 		let CUSTOM = "custom";
+		let time_delta = 0;
+		let real_time = Number(new Date($.ajax({async:false}).getResponseHeader("Date")));
+		let system_time = Number(new Date());
+		time_delta = real_time - system_time;
+		console.log(time_delta);
 		setInterval(async () => {
 			let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
 			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
@@ -486,11 +493,11 @@ function main(){
 				}
 				tasks--;
 			});
-			let time_0 = Number(new Date());
+			let time_0 = Number(new Date()) + time_delta;
 			let checkfetchendinterval = setInterval(()=>{
 				if (tasks == 0){
 					clearInterval(checkfetchendinterval);
-					let now = Number(new Date());
+					let now = Number(new Date()) + time_delta;
 					console.log(`fetch: time = ${now - time_0}`);
 					let pool = [];
 					if (enable_friends)
