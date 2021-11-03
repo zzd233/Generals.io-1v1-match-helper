@@ -33,7 +33,7 @@ async function load_elements(){
 	body {
 		background-color: #222;
 	}
-	
+
 	#all {
 		-moz-user-select: none;
 		-webkit-user-select: none;
@@ -61,16 +61,16 @@ async function load_elements(){
 
 	#option {
 		margin-top: 5px;
-		height: 200px;
+		height: 230px;
 		padding: 10px 10px 10px 10px;
 	}
-	
+
 	#range {
 		border: black solid 4px;
 		margin-bottom: 5px;
 		padding: 5px 5px 5px 5px;
 	}
-	
+
 	#list {
 		margin-top: 10px;
 		font-size: 18px;
@@ -78,11 +78,11 @@ async function load_elements(){
 		padding: 10px 10px 10px 10px;
 		overflow-y: scroll;
 	}
-	
+
 	#list-table {
 		display: table;
 	}
-	
+
 	.button {
 		border: black solid 3px;
 		border-radius: 3px;
@@ -92,7 +92,7 @@ async function load_elements(){
 		text-align: center;
 		color: white;
 	}
-	
+
 	#button4 {
 		border: black solid 3px;
 		border-radius: 3px;
@@ -102,24 +102,24 @@ async function load_elements(){
 		text-align: center;
 		color: white;
 	}
-	
-	#enable_match, #enable_leaderboard, #enable_friends, #new_friend {
+
+	#enable_match, #enable_leaderboard, #enable_friends, #new_friend, #toggle_list {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 	}
-	
+
 	#match-starbound {
 		text-align: center;
 		font-size: 15px;
 		height: 30px;
 		width: 45px;
 	}
-	
+
 	#new_friend {
 		padding-top: 3px;
 	}
-	
+
 	#addfriend {
 		text-align: center;
 		font-size: 15px;
@@ -131,7 +131,7 @@ async function load_elements(){
 		text_align: center;
 		display: table-row;
 	}
-	
+
 	.table_cell {
 		text_align: center;
 		display: table-cell;
@@ -157,7 +157,7 @@ async function load_elements(){
 		text-shadow: 2px 2px teal;
 		font-family: Quicksand-Bold;
 	}
-	
+
 	`;
 	c.rel = "stylesheet";
 	document.body.appendChild(c);
@@ -201,10 +201,16 @@ async function load_elements(){
 						Add/Del
 					</div>
 				</div>
+				<div id = "toggle_list">
+					<div>
+						Show list: &nbsp;
+					</div>
+					<div class = "button" id = "toggle">ON</div>
+				</div>
 			</div>
 			<div id = "list">
 				<div id = "list-table">
-					
+
 				</div>
 			</div>
 		</div>
@@ -220,7 +226,7 @@ let enable_friends = false;
 let friend_list = [];
 const INTERVAL = 3000, Eps = 1e-3;
 let myname = undefined;
-let data = {};//store other's star and last 1v1 game time; example: data["zzd233"] = {star: 70.00, time: 1617360510077} 
+let data = {};//store other's star and last 1v1 game time; example: data["zzd233"] = {star: 70.00, time: 1617360510077}
 let friend_dictionary = {};
 function px2int(s){
 	return parseInt(s.substr(0, s.length - 2));
@@ -260,9 +266,7 @@ function load_drag(box, callback = () => {}){
 function main(){
 	setTimeout(async () => {
 		let lib_socket = 'https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js';
-		let lib_jquery = 'https://code.jquery.com/jquery-3.6.0.min.js';
 		await load(lib_socket);
-		await load(lib_jquery);
 		await load_elements();
 		socket = io('https://ws.generals.io');
 		await waitConnect();
@@ -291,8 +295,28 @@ function main(){
 		button2 = document.getElementById('button2');
 		button3 = document.getElementById('button3');
 		button4 = document.getElementById('button4');
+		toggle = document.getElementById('toggle');
 		option_element = document.getElementById('option');
 		list_element = document.getElementById('list');
+		toggle.style.backgroundColor = "green";
+		if(window.localStorage["QUEUE_SNIPER_HIDE_LIST"] == "hide") {
+			toggle.textContent = "OFF";
+			list_element.style.display = "none";
+			toggle.style.backgroundColor = "red";
+		}
+		toggle.addEventListener('click', () => {
+			if(window.localStorage["QUEUE_SNIPER_HIDE_LIST"] == "hide") {
+				window.localStorage["QUEUE_SNIPER_HIDE_LIST"] = "show";
+				toggle.textContent = "ON";
+				list_element.style.display = "";
+				toggle.style.backgroundColor = "green";
+			} else {
+				window.localStorage["QUEUE_SNIPER_HIDE_LIST"] = "hide";
+				toggle.textContent = "OFF";
+				list_element.style.display = "none";
+				toggle.style.backgroundColor = "red";
+			}
+		});
 		match_starbound = document.getElementById("match-starbound");
 		addfriend = document.getElementById("addfriend");
 		list_table = document.getElementById("list-table");
@@ -390,11 +414,12 @@ function main(){
 		let FFA = "FFA";
 		let TWOVTWO = "2v2";
 		let CUSTOM = "custom";
-		let time_delta = 0;
-		let real_time = Number(new Date($.ajax({async:false}).getResponseHeader("Date")));
-		let system_time = Number(new Date());
-		time_delta = real_time - system_time;
-		console.log(time_delta);
+        setInterval(async () => {
+            let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
+			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
+				main_div.hidden = true;
+			}
+        }, 100);
 		setInterval(async () => {
 			let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
 			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
@@ -493,11 +518,11 @@ function main(){
 				}
 				tasks--;
 			});
-			let time_0 = Number(new Date()) + time_delta;
+			let time_0 = Number(new Date());
 			let checkfetchendinterval = setInterval(()=>{
 				if (tasks == 0){
 					clearInterval(checkfetchendinterval);
-					let now = Number(new Date()) + time_delta;
+					let now = Number(new Date());
 					console.log(`fetch: time = ${now - time_0}`);
 					let pool = [];
 					if (enable_friends)
