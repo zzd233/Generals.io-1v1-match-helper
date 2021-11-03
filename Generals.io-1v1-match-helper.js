@@ -34,7 +34,7 @@ async function load_elements(){
 		background-color: #222;
 	}
 
-	#all {
+	#Sniper-all {
 		-moz-user-select: none;
 		-webkit-user-select: none;
 		-ms-user-select: none;
@@ -45,33 +45,33 @@ async function load_elements(){
 		top: 70px;
 	}
 
-	#option, #list {
+	#Sniper-option, #Sniper-list {
 		font-size: 20px;
 		background-color: white;
 		border: purple solid 5px;
 		border-radius: 5px;
 	}
 
-	#title {
+	#Sniper-title {
 		font-size: 24px;
 		height: 30px;
 		padding: 5px 10px 0px 10px;
 		text-align: center;
 	}
 
-	#option {
+	#Sniper-option {
 		margin-top: 5px;
 		height: 230px;
 		padding: 10px 10px 10px 10px;
 	}
 
-	#range {
+	#Sniper-range {
 		border: black solid 4px;
 		margin-bottom: 5px;
 		padding: 5px 5px 5px 5px;
 	}
 
-	#list {
+	#Sniper-list {
 		margin-top: 10px;
 		font-size: 18px;
 		height: 400px;
@@ -79,11 +79,11 @@ async function load_elements(){
 		overflow-y: scroll;
 	}
 
-	#list-table {
+	#Sniper-list-table {
 		display: table;
 	}
 
-	.button {
+	.Sniper-button {
 		border: black solid 3px;
 		border-radius: 3px;
 		background-color: red;
@@ -93,7 +93,7 @@ async function load_elements(){
 		color: white;
 	}
 
-	#button4 {
+	#Sniper-button4 {
 		border: black solid 3px;
 		border-radius: 3px;
 		background-color: green;
@@ -103,56 +103,56 @@ async function load_elements(){
 		color: white;
 	}
 
-	#enable_match, #enable_leaderboard, #enable_friends, #new_friend, #toggle_list {
+	#Sniper-enable_match, #Sniper-enable_leaderboard, #Sniper-enable_friends, #Sniper-new_friend, #Sniper-toggle_list {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 	}
 
-	#match-starbound {
+	#Sniper-match-starbound {
 		text-align: center;
 		font-size: 15px;
 		height: 30px;
 		width: 45px;
 	}
 
-	#new_friend {
+	#Sniper-new_friend {
 		padding-top: 3px;
 	}
 
-	#addfriend {
+	#Sniper-addfriend {
 		text-align: center;
 		font-size: 15px;
 		height: 30px;
 		width: 90px;
 	}
 
-	.table_row {
+	.Sniper-table_row {
 		text_align: center;
 		display: table-row;
 	}
 
-	.table_cell {
+	.Sniper-table_cell {
 		text_align: center;
 		display: table-cell;
 		border: black solid 1px;
 		padding: 3px 3px 3px 3px;
 	}
 
-	.header {
+	.Sniper-header {
 		background-color: #CCC;
 	}
 
-	.friendcell {
+	.Sniper-friendcell {
 		background-color: #BCF;
 		color: black;
 	}
 
-	.links {
+	.Sniper-links {
 		color: black;
 	}
 
-	#titlelink {
+	#Sniper-titlelink {
 		color: white;
 		text-shadow: 2px 2px teal;
 		font-family: Quicksand-Bold;
@@ -163,53 +163,53 @@ async function load_elements(){
 	document.body.appendChild(c);
 	let d = document.createElement("div");
 	d.innerHTML = `
-		<div id = "all" hidden = "true">
-			<div id = "title">
-				<a id = "titlelink" href = "https://github.com/zzd233/Generals.io-1v1-match-helper" target = "_blank">Generals.io 1v1 match helper</a>
+		<div id = "Sniper-all" hidden = "true">
+			<div id = "Sniper-title">
+				<a id = "Sniper-titlelink" href = "https://github.com/zzd233/Generals.io-1v1-match-helper" target = "_blank">Generals.io 1v1 match helper</a>
 			</div>
-			<div id = "option">
-				<div id = "range">
+			<div id = "Sniper-option">
+				<div id = "Sniper-range">
 					<div>
 						Finding range:
 					</div>
-					<div id = "enable_leaderboard">
+					<div id = "Sniper-enable_leaderboard">
 						<div>
 							&nbsp; Leaderboard: star ≥
 						</div>
-						<input id = "match-starbound" placeholder = "inf"> &nbsp;
-						<div class = "button" id = "button2">OFF</div>
+						<input id = "Sniper-match-starbound" placeholder = "inf"> &nbsp;
+						<div class = "Sniper-button" id = "Sniper-button2">OFF</div>
 					</div>
-					<div id = "enable_friends">
+					<div id = "Sniper-enable_friends">
 						<div>
 							&nbsp; Friends: &nbsp;
 						</div>
-						<div class = "button" id = "button3">OFF</div>
+						<div class = "Sniper-button" id = "Sniper-button3">OFF</div>
 					</div>
 				</div>
-				<div id = "enable_match">
+				<div id = "Sniper-enable_match">
 					<div>
 						Auto Match:&nbsp;
 					</div>
-					<div class = "button" id = "button1">OFF</div>
+					<div class = "Sniper-button" id = "Sniper-button1">OFF</div>
 				</div>
-				<div id = "new_friend">
+				<div id = "Sniper-new_friend">
 					<div>
 						Modify friend: &nbsp;
 					</div>
-					<input id = "addfriend" placeholder = "someone"> &nbsp;
-					<div id = "button4">
+					<input id = "Sniper-addfriend" placeholder = "someone"> &nbsp;
+					<div id = "Sniper-button4">
 						Add/Del
 					</div>
 				</div>
-				<div id = "toggle_list">
+				<div id = "Sniper-toggle_list">
 					<div>
 						Show list: &nbsp;
 					</div>
-					<div class = "button" id = "toggle">ON</div>
+					<div class = "Sniper-button" id = "Sniper-toggle">ON</div>
 				</div>
 			</div>
-			<div id = "list">
-				<div id = "list-table">
+			<div id = "Sniper-list">
+				<div id = "Sniper-list-table">
 
 				</div>
 			</div>
@@ -217,7 +217,7 @@ async function load_elements(){
 	`;
 	document.body.appendChild(d);
 }
-let main_div, button1, button2, button3, button4, option_element, list_element;
+let main_div, button1, button2, button3, button4, option_element, list_element, toggle;
 let match_starbound, addfriend;
 let list_table;
 let enable_match = false;
@@ -279,7 +279,7 @@ function main(){
 				myname = tmp.value;
 		}
 		get_myname();
-		main_div = document.getElementById('all');
+		main_div = document.getElementById('Sniper-all');
 		let local_main_div_position = JSON.parse(localStorage.getItem("zzdscript_main_div_position"));
 		if (!local_main_div_position){
 			local_main_div_position = {x: 80, y: 70};
@@ -293,13 +293,13 @@ function main(){
 				y: px2int(main_div.style.top),
 			}));
 		});
-		button1 = document.getElementById('button1');
-		button2 = document.getElementById('button2');
-		button3 = document.getElementById('button3');
-		button4 = document.getElementById('button4');
-		toggle = document.getElementById('toggle');
-		option_element = document.getElementById('option');
-		list_element = document.getElementById('list');
+		button1 = document.getElementById('Sniper-button1');
+		button2 = document.getElementById('Sniper-button2');
+		button3 = document.getElementById('Sniper-button3');
+		button4 = document.getElementById('Sniper-button4');
+		toggle = document.getElementById('Sniper-toggle');
+		option_element = document.getElementById('Sniper-option');
+		list_element = document.getElementById('Sniper-list');
 		toggle.style.backgroundColor = "green";
 		if(window.localStorage["QUEUE_SNIPER_HIDE_LIST"] == "hide") {
 			toggle.textContent = "OFF";
@@ -319,9 +319,9 @@ function main(){
 				toggle.style.backgroundColor = "red";
 			}
 		});
-		match_starbound = document.getElementById("match-starbound");
-		addfriend = document.getElementById("addfriend");
-		list_table = document.getElementById("list-table");
+		match_starbound = document.getElementById("Sniper-match-starbound");
+		addfriend = document.getElementById("Sniper-addfriend");
+		list_table = document.getElementById("Sniper-list-table");
 		let settings = JSON.parse(localStorage.getItem("zzdscript_settings"));
 		if (!settings){
 			settings = [enable_match, enable_leaderboard, enable_friends, "50"];
@@ -569,14 +569,14 @@ function main(){
 						return x - y;
 					});
 					let htmlstring = `
-						<div class = "table_row">
-							<div class = "table_cell header">
+						<div class = "Sniper-table_row">
+							<div class = "Sniper-table_cell Sniper-header">
 								name
 							</div>
-							<div class = "table_cell header">
+							<div class = "Sniper-table_cell Sniper-header">
 								star
 							</div>
-							<div class = "table_cell header">
+							<div class = "Sniper-table_cell Sniper-header">
 								last
 							</div>
 						</div>
@@ -594,14 +594,14 @@ function main(){
 					}
 					for (let user of pool){
 						htmlstring += `
-							<div class = "table_row">
-								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
-									<a class = "links" href = "https://generals.io/profiles/${encodeURIComponent(user.name)}" target = "_blank">${user.name}</a>
+							<div class = "Sniper-table_row">
+								<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
+									<a class = "Sniper-links" href = "https://generals.io/profiles/${encodeURIComponent(user.name)}" target = "_blank">${user.name}</a>
 								</div>
-								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
+								<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
 									${user.star}
 								</div>
-								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
+								<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
 									${isNaN(user.time_past) ? user.type : time_past_to_string(user.time_past)}
 								</div>
 							</div>
