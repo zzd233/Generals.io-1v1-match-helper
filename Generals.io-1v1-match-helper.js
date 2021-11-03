@@ -534,13 +534,14 @@ function main(){
 					}
 				}
 			}
-			time_0 = Number(new Date()) + time_delta;
 			let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
 			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
 				main_div.hidden = true;
+				time_0 = undefined;
 				return;
 			}
 			main_div.hidden = false;
+			time_0 = Number(new Date()) + time_delta;
 			get_myname();
 			async function update_player(name, current_star){
 				if (data[name] != undefined && abs(current_star - data[name].star) < 0.01)
