@@ -420,14 +420,121 @@ function main(){
 		let real_time = Number(new Date($.ajax({async:false}).getResponseHeader("Date")));
 		let system_time = Number(new Date());
 		time_delta = real_time - system_time;
-		console.log(time_delta);
+		console.log(`time_delta = `, time_delta);
         setInterval(async () => {
             let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
 			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
 				main_div.hidden = true;
 			}
         }, 100);
+		let tasks = 0, time_0 = undefined;
+		let players_from_leaderboard, bound;
 		setInterval(async () => {
+			if (tasks > 0)
+				return;
+			if (time_0 !== undefined){
+				let now = Number(new Date()) + time_delta;
+				if (now - time_0 > 1500)
+					console.log(new Date(), `fetch: time = ${now - time_0}`);
+				let pool = [];
+				if (enable_friends)
+					for (let name of friend_list){
+						pool.push({
+							name: name,
+							star: data[name].star,
+							time_past: isNaN(data[name].time) ? NaN : now - data[name].time,
+							isfriend: true,
+							type: data[name].type,
+						});
+					}
+				if (enable_leaderboard){
+					for (let name of players_from_leaderboard){
+						if (!name)
+							continue;
+						if ((friend_dictionary[name] === true && enable_friends) || !data[name] || !(data[name].star > bound) || name === myname)
+							continue;
+						if (isNaN(data[name].time) || now - data[name].time > 1000 * 60 * 30)
+							continue;
+						pool.push({
+							name: name,
+							star: data[name].star,
+							time_past: isNaN(data[name].time) ? NaN : now - data[name].time,
+							isfriend: false,
+							type: data[name].type,
+						});
+					}
+				}
+				pool.sort((a, b) => {
+					let [x, y] = [a.time_past, b.time_past];
+					if (isNaN(x) && isNaN(y)) {
+						return b.star - a.star;
+					}
+					if (isNaN(x) !== isNaN(y))
+						return isNaN(x) ? 1 : -1;
+					return x - y;
+				});
+				let htmlstring = `
+					<div class = "Sniper-table_row">
+						<div class = "Sniper-table_cell Sniper-header">
+							name
+						</div>
+						<div class = "Sniper-table_cell Sniper-header">
+							star
+						</div>
+						<div class = "Sniper-table_cell Sniper-header">
+							last
+						</div>
+					</div>
+				`;
+				function time_past_to_string(t){
+					if (isNaN(t))
+						return "";
+					t = Math.floor(t / 1000);
+					if (t < 60)
+						return `${t}s`;
+					else if (t < 3600)
+						return `${Math.floor(t/60)}m`;
+					else
+						return `${(t/3600).toFixed(1)}h`;
+				}
+				for (let user of pool){
+					htmlstring += `
+						<div class = "Sniper-table_row">
+							<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
+								<a class = "Sniper-links" href = "https://generals.io/profiles/${encodeURIComponent(user.name)}" target = "_blank">${user.name}</a>
+							</div>
+							<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
+								${user.star}
+							</div>
+							<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
+								${isNaN(user.time_past) ? user.type : time_past_to_string(user.time_past)}
+							</div>
+						</div>
+					`;
+				}
+				list_table.innerHTML = htmlstring;
+				if (enable_match && pool.length > 0){
+					let t = pool[0];
+					if (t.time_past < INTERVAL + 7000){
+						console.log("join 1v1!");
+						try { clickButton('play'); } catch (e) { }
+						try { clickButton('1v1'); } catch (e) { }
+						try { clickButton('play again'); } catch (e) { }
+						button1.innerHTML = "OFF";
+						button1.style.backgroundColor = "red";
+						enable_match = false;
+						setTimeout(() => {
+							try {
+								clickButton('cancel');
+								button1.innerHTML = "ON";
+								button1.style.backgroundColor = "green";
+								enable_match = true;
+							} catch (e){}
+						}, 10000);
+					}
+				}
+			}
+			time_0 = Number(new Date()) + time_delta;
 			let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
 			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
 				main_div.hidden = true;
@@ -435,12 +542,11 @@ function main(){
 			}
 			main_div.hidden = false;
 			get_myname();
-			let tasks = 0;
 			async function update_player(name, current_star){
 				if (data[name] != undefined && abs(current_star - data[name].star) < 0.01)
 					return;
 				else {
-					console.log("name = ",name,"star = ",current_star, data[name]);
+					// console.log("name = ",name,"star = ",current_star, data[name]);
 					tasks++;
 					let url = 'https://generals.io/api/replaysForUsername?u=' + encodeURIComponent(name) + '&offset=0&count=1';
 					fetch(url).then(tmp => {
@@ -467,11 +573,11 @@ function main(){
 			}
 			settings = [enable_match, enable_leaderboard, enable_friends, match_starbound.value];
 			localStorage.setItem('zzdscript_settings',JSON.stringify(settings));
-			let bound = parseFloat(match_starbound.value);
+			bound = parseFloat(match_starbound.value);
 			if (isNaN(bound))
 				bound = Infinity;
 			bound -= Eps;
-			let players_from_leaderboard = [];
+			players_from_leaderboard = [];
 			tasks++;
 			socket.emit('leaderboard', 'duel', (res) => {
 				// console.log(res);
@@ -525,113 +631,7 @@ function main(){
 				}
 				tasks--;
 			});
-			let time_0 = Number(new Date()) + time_delta;
-			let checkfetchendinterval = setInterval(()=>{
-				if (tasks == 0){
-					clearInterval(checkfetchendinterval);
-					let now = Number(new Date()) + time_delta;
-					console.log(`fetch: time = ${now - time_0}`);
-					let pool = [];
-					if (enable_friends)
-						for (let name of friend_list){
-							pool.push({
-								name: name,
-								star: data[name].star,
-								time_past: isNaN(data[name].time) ? NaN : now - data[name].time,
-								isfriend: true,
-								type: data[name].type,
-							});
-						}
-					if (enable_leaderboard){
-						for (let name of players_from_leaderboard){
-							if (!name)
-								continue;
-							if ((friend_dictionary[name] === true && enable_friends) || !data[name] || !(data[name].star > bound) || name === myname)
-								continue;
-							if (isNaN(data[name].time) || now - data[name].time > 1000 * 60 * 30)
-								continue;
-							pool.push({
-								name: name,
-								star: data[name].star,
-								time_past: isNaN(data[name].time) ? NaN : now - data[name].time,
-								isfriend: false,
-								type: data[name].type,
-							});
-						}
-					}
-					pool.sort((a, b) => {
-						let [x, y] = [a.time_past, b.time_past];
-						if (isNaN(x) && isNaN(y)) {
-							return b.star - a.star;
-						}
-						if (isNaN(x) !== isNaN(y))
-							return isNaN(x) ? 1 : -1;
-						return x - y;
-					});
-					let htmlstring = `
-						<div class = "Sniper-table_row">
-							<div class = "Sniper-table_cell Sniper-header">
-								name
-							</div>
-							<div class = "Sniper-table_cell Sniper-header">
-								star
-							</div>
-							<div class = "Sniper-table_cell Sniper-header">
-								last
-							</div>
-						</div>
-					`;
-					function time_past_to_string(t){
-						if (isNaN(t))
-							return "";
-						t = Math.floor(t / 1000);
-						if (t < 60)
-							return `${t}s`;
-						else if (t < 3600)
-							return `${Math.floor(t/60)}m`;
-						else
-							return `${(t/3600).toFixed(1)}h`;
-					}
-					for (let user of pool){
-						htmlstring += `
-							<div class = "Sniper-table_row">
-								<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
-									<a class = "Sniper-links" href = "https://generals.io/profiles/${encodeURIComponent(user.name)}" target = "_blank">${user.name}</a>
-								</div>
-								<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
-									${user.star}
-								</div>
-								<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
-									${isNaN(user.time_past) ? user.type : time_past_to_string(user.time_past)}
-								</div>
-							</div>
-						`;
-					}
-					list_table.innerHTML = htmlstring;
-					if (enable_match && pool.length > 0){
-						let t = pool[0];
-						if (t.time_past < INTERVAL + 7000){
-							console.log("join 1v1!");
-							try { clickButton('play'); } catch (e) { }
-							try { clickButton('1v1'); } catch (e) { }
-							try { clickButton('play again'); } catch (e) { }
-							button1.innerHTML = "OFF";
-							button1.style.backgroundColor = "red";
-							enable_match = false;
-							setTimeout(() => {
-								try {
-									clickButton('cancel');
-									button1.innerHTML = "ON";
-									button1.style.backgroundColor = "green";
-									enable_match = true;
-								} catch (e){}
-							}, 10000);
-						}
-					}
-					return;
-				}
-			}, 333);
-		}, INTERVAL);
+		}, 100);
 	}, 1000);
 };
 
