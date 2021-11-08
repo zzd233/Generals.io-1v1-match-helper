@@ -242,10 +242,10 @@ function load_drag(box, callback = () => {}){
 		y = event.clientY;
 		isdrag = true;
 	}
-	document.onmousemove = (event) => {
+	box.onmousemove = (event) => {
 		if (!isdrag)
 			return;
-		console.log(event.button);
+		// console.log(event.button);
 		event = event || window.event;
 		let dx = event.clientX - x;
 		let dy = event.clientY - y;
@@ -259,7 +259,7 @@ function load_drag(box, callback = () => {}){
 		box.style.top = int2px(ny);
 		callback();
 	}
-	document.onmouseup = (event) => {
+	box.onmouseup = (event) => {
 		isdrag = false;
 	}
 }
@@ -427,7 +427,7 @@ function main(){
 				main_div.hidden = true;
 			}
         }, 100);
-		let tasks = 0, time_0 = undefined;
+		let tasks = 0, time_0 = undefined, friend_list_loaded = false;
 		let players_from_leaderboard, bound;
 		setInterval(async () => {
 			if (tasks > 0)
@@ -583,7 +583,8 @@ function main(){
 			socket.emit('leaderboard', 'duel', (res) => {
 				// console.log(res);
 				let stars = res.stars, users = res.users;
-				if (enable_friends){
+				if (enable_friends || !friend_list_loaded){
+					friend_list_loaded = true;
 					for (let name of friend_list){
 						let index = users.findIndex(x => x === name);
 						if (index === -1){
