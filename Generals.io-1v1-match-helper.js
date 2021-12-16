@@ -429,7 +429,14 @@ function main(){
         }, 100);
 		let tasks = 0, time_0 = undefined, friend_list_loaded = false;
 		let players_from_leaderboard, bound;
+		let count_tasks_n0 = 0, last_tasks = -1;
 		setInterval(async () => {
+			if (last_tasks === tasks)
+				count_tasks_n0 ++;
+			if (count_tasks_n0 > 600)
+				tasks = count_tasks_n0 = 0;
+			last_tasks = tasks;
+			//console.log(tasks);
 			if (tasks > 0)
 				return;
 			if (time_0 !== undefined){
