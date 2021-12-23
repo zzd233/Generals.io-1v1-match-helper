@@ -430,13 +430,22 @@ function main(){
 		let tasks = 0, time_0 = undefined, friend_list_loaded = false;
 		let players_from_leaderboard, bound;
 		let count_tasks_n0 = 0, last_tasks = -1;
-		setInterval(async () => {
-			if (last_tasks === tasks)
+		let main_interval = setInterval(async () => {
+			if (tasks !== 0 && last_tasks === tasks)
 				count_tasks_n0 ++;
-			if (count_tasks_n0 > 600)
+			else
+				count_tasks_n0 = 0;
+			if (count_tasks_n0 > 100) {
+				clearInterval(main_interval);
+				throw "tasks > 0";
 				tasks = count_tasks_n0 = 0;
+			}
 			last_tasks = tasks;
-			//console.log(tasks);
+			console.log(tasks);
+			if (tasks < 0) {
+				clearInterval(main_interval);
+				throw "tasks < 0";
+			}
 			if (tasks > 0)
 				return;
 			if (time_0 !== undefined){
@@ -537,7 +546,7 @@ function main(){
 								button1.style.backgroundColor = "green";
 								enable_match = true;
 							} catch (e){}
-						}, 10000);
+						}, 5000);
 					}
 				}
 			}
@@ -550,12 +559,14 @@ function main(){
 			main_div.hidden = false;
 			time_0 = Number(new Date()) + time_delta;
 			get_myname();
-			async function update_player(name, current_star){
+			function update_player(name, current_star){
 				if (data[name] != undefined && abs(current_star - data[name].star) < 0.01)
 					return;
 				else {
 					// console.log("name = ",name,"star = ",current_star, data[name]);
-					tasks++;
+					tasks+=100;
+					let task_id = Number(new Date())%100000;
+					console.log(`+${task_id}, ${tasks}`);
 					let url = 'https://generals.io/api/replaysForUsername?u=' + encodeURIComponent(name) + '&offset=0&count=1';
 					fetch(url).then(tmp => {
 						return tmp.json();
@@ -575,7 +586,8 @@ function main(){
 							else if (tmp.type === 'custom')
 								data[name].type = CUSTOM;
 						}
-						tasks--;
+						tasks-=100;
+						console.log(`-${task_id}, ${tasks}`);
 					});
 				}
 			}
@@ -586,7 +598,9 @@ function main(){
 				bound = Infinity;
 			bound -= Eps;
 			players_from_leaderboard = [];
-			tasks++;
+			tasks+=10000;
+			let task_id = Number(new Date())%100000;
+			console.log(`+${task_id}, ${tasks}`);
 			socket.emit('leaderboard', 'duel', (res) => {
 				// console.log(res);
 				let stars = res.stars, users = res.users;
@@ -596,6 +610,8 @@ function main(){
 						let index = users.findIndex(x => x === name);
 						if (index === -1){
 							tasks++;
+							let task_id = Number(new Date())%100000;
+							console.log(`+${task_id}, ${tasks}`);
 							let url = 'https://generals.io/api/starsAndRanks?u=' + encodeURIComponent(name);
 							fetch(url).then(tmp => {
 								return tmp.json();
@@ -605,6 +621,7 @@ function main(){
 									star = 0;
 								update_player(name, star);
 								tasks--;
+								console.log(`-${task_id}, ${tasks}`);
 							});
 						} else {
 							update_player(name, parseFloat(stars[index]).toFixed(2));
@@ -625,20 +642,20 @@ function main(){
 									data[users[i]] = {star: parseFloat(stars[i]).toFixed(2), time: NaN, type: NOREPLAY};
 							}
 						}
-						tasks--;
-						return;
-					}
-					const step = 2;
-					leaderboard_cnt += step;
-					for (let i = 0; i < stars.length; i++) {
-						if (users[i] && (friend_dictionary[users[i]] !== true || !enable_friends)){
-							if (leaderboard_cnt - step < i && i <= leaderboard_cnt)
-								data[users[i]] = undefined;
-							update_player(users[i], parseFloat(stars[i]).toFixed(2));
+					} else {
+						const step = 2;
+						leaderboard_cnt += step;
+						for (let i = 0; i < stars.length; i++) {
+							if (users[i] && (friend_dictionary[users[i]] !== true || !enable_friends)){
+								if (leaderboard_cnt - step < i && i <= leaderboard_cnt)
+									data[users[i]] = undefined;
+								update_player(users[i], parseFloat(stars[i]).toFixed(2));
+							}
 						}
 					}
 				}
-				tasks--;
+				tasks-=10000;
+				console.log(`-${task_id}, ${tasks}`);
 			});
 		}, 100);
 	}, 1000);
