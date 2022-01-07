@@ -224,7 +224,7 @@ let enable_match = false;
 let enable_leaderboard = false;
 let enable_friends = false;
 let friend_list = [];
-const INTERVAL = 3000, Eps = 1e-3;
+const Eps = 1e-3;
 let myname = undefined;
 let data = {};//store other's star and last 1v1 game time; example: data["zzd233"] = {star: 70.00, time: 1617360510077}
 let friend_dictionary = {};
@@ -435,9 +435,10 @@ function main(){
 				count_tasks_n0 ++;
 			else
 				count_tasks_n0 = 0;
-			if (count_tasks_n0 > 100) {
-				clearInterval(main_interval);
-				throw "tasks > 0";
+			if (count_tasks_n0 > 500) {
+				// clearInterval(main_interval);
+				if (tasks !== 10000)
+					throw "tasks > 0";
 				tasks = count_tasks_n0 = 0;
 			}
 			last_tasks = tasks;
@@ -531,7 +532,7 @@ function main(){
 				list_table.innerHTML = htmlstring;
 				if (enable_match && pool.length > 0){
 					let t = pool[0];
-					if (t.time_past < INTERVAL + 7000){
+					if (t.time_past < 5000){
 						console.log("join 1v1!");
 						try { clickButton('play'); } catch (e) { }
 						try { clickButton('1v1'); } catch (e) { }
