@@ -437,8 +437,6 @@ function main(){
 				count_tasks_n0 = 0;
 			if (count_tasks_n0 > 500) {
 				// clearInterval(main_interval);
-				if (tasks !== 10000)
-					throw "tasks > 0";
 				tasks = count_tasks_n0 = 0;
 			}
 			last_tasks = tasks;
@@ -532,7 +530,7 @@ function main(){
 				list_table.innerHTML = htmlstring;
 				if (enable_match && pool.length > 0){
 					let t = pool[0];
-					if (t.time_past < 5000){
+					if (t.time_past < 8000){
 						console.log("join 1v1!");
 						try { clickButton('play'); } catch (e) { }
 						try { clickButton('1v1'); } catch (e) { }
@@ -547,7 +545,7 @@ function main(){
 								button1.style.backgroundColor = "green";
 								enable_match = true;
 							} catch (e){}
-						}, 5000);
+						}, 8000);
 					}
 				}
 			}
