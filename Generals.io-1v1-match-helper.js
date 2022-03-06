@@ -646,7 +646,7 @@ function main(){
 						leaderboard_cnt += step;
 						for (let i = 0; i < stars.length; i++) {
 							if (users[i] && (friend_dictionary[users[i]] !== true || !enable_friends)){
-								if (leaderboard_cnt - step < i && i <= leaderboard_cnt)
+								if (leaderboard_cnt - step <= i && i < leaderboard_cnt)
 									data[users[i]] = undefined;
 								update_player(users[i], parseFloat(stars[i]).toFixed(2));
 							}
