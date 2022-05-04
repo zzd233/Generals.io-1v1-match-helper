@@ -440,7 +440,7 @@ function main(){
 				tasks = count_tasks_n0 = 0;
 			}
 			last_tasks = tasks;
-			console.log(tasks);
+			// console.log(tasks);
 			if (tasks < 0) {
 				clearInterval(main_interval);
 				throw "tasks < 0";
@@ -565,7 +565,7 @@ function main(){
 					// console.log("name = ",name,"star = ",current_star, data[name]);
 					tasks+=100;
 					let task_id = Number(new Date())%100000;
-					console.log(`+${task_id}, ${tasks}`);
+					// console.log(`+${task_id}, ${tasks}`);
 					let url = 'https://generals.io/api/replaysForUsername?u=' + encodeURIComponent(name) + '&offset=0&count=1';
 					fetch(url).then(tmp => {
 						return tmp.json();
@@ -586,7 +586,7 @@ function main(){
 								data[name].type = CUSTOM;
 						}
 						tasks-=100;
-						console.log(`-${task_id}, ${tasks}`);
+						// console.log(`-${task_id}, ${tasks}`);
 					});
 				}
 			}
@@ -599,7 +599,7 @@ function main(){
 			players_from_leaderboard = [];
 			tasks+=10000;
 			let task_id = Number(new Date())%100000;
-			console.log(`+${task_id}, ${tasks}`);
+			// console.log(`+${task_id}, ${tasks}`);
 			socket.emit('leaderboard', 'duel', (res) => {
 				// console.log(res);
 				let stars = res.stars, users = res.users;
@@ -610,7 +610,7 @@ function main(){
 						if (index === -1){
 							tasks++;
 							let task_id = Number(new Date())%100000;
-							console.log(`+${task_id}, ${tasks}`);
+							// console.log(`+${task_id}, ${tasks}`);
 							let url = 'https://generals.io/api/starsAndRanks?u=' + encodeURIComponent(name);
 							fetch(url).then(tmp => {
 								return tmp.json();
@@ -620,7 +620,7 @@ function main(){
 									star = 0;
 								update_player(name, star);
 								tasks--;
-								console.log(`-${task_id}, ${tasks}`);
+								// console.log(`-${task_id}, ${tasks}`);
 							});
 						} else {
 							update_player(name, parseFloat(stars[index]).toFixed(2));
@@ -654,7 +654,7 @@ function main(){
 					}
 				}
 				tasks-=10000;
-				console.log(`-${task_id}, ${tasks}`);
+				// console.log(`-${task_id}, ${tasks}`);
 			});
 		}, 100);
 	}, 1000);
