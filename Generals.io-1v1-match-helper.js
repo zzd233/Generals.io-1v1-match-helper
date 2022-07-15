@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name         Generals.io 1v1 match helper
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.0.2
 // @description  A tool for 1v1 to get stars
 // @author       zzd233
 // @match        https://generals.io/
+// @match        https://bot.generals.io/
+// @match        localhost:8080/
 // @grant        none
 // ==/UserScript==
 let abs = Math.abs, max = Math.max, min = Math.min;
@@ -34,7 +36,7 @@ async function load_elements(){
 		background-color: #222;
 	}
 
-	#Sniper-all {
+	#all {
 		-moz-user-select: none;
 		-webkit-user-select: none;
 		-ms-user-select: none;
@@ -45,114 +47,116 @@ async function load_elements(){
 		top: 70px;
 	}
 
-	#Sniper-option, #Sniper-list {
+	#option, #list {
 		font-size: 20px;
-		background-color: white;
-		border: purple solid 5px;
+		border: teal solid 5px;
+		background-color: #333;
+		color: white;
 		border-radius: 5px;
 	}
 
-	#Sniper-title {
+	#title {
 		font-size: 24px;
 		height: 30px;
 		padding: 5px 10px 0px 10px;
 		text-align: center;
 	}
 
-	#Sniper-option {
+	#option {
 		margin-top: 5px;
-		height: 230px;
+		height: 210px;
 		padding: 10px 10px 10px 10px;
 	}
 
-	#Sniper-range {
-		border: black solid 4px;
+	#range {
+		border: teal solid 4px;
 		margin-bottom: 5px;
 		padding: 5px 5px 5px 5px;
 	}
 
-	#Sniper-list {
+	#list {
 		margin-top: 10px;
 		font-size: 18px;
-		height: 400px;
+		height: 350px;
 		padding: 10px 10px 10px 10px;
 		overflow-y: scroll;
 	}
 
-	#Sniper-list-table {
+	#list-table {
 		display: table;
 	}
 
-	.Sniper-button {
-		border: black solid 3px;
+	.button {
+		border: teal solid 3px;
 		border-radius: 3px;
-		background-color: red;
-		height: 30px;
+		background-color: #333;
+		height: 25px;
 		width: 50px;
 		text-align: center;
 		color: white;
 	}
 
-	#Sniper-button4 {
+	#button4 {
 		border: black solid 3px;
 		border-radius: 3px;
-		background-color: green;
+		background-color: teal;
 		height: 30px;
 		width: 85px;
 		text-align: center;
 		color: white;
 	}
 
-	#Sniper-enable_match, #Sniper-enable_leaderboard, #Sniper-enable_friends, #Sniper-new_friend, #Sniper-toggle_list {
+	#enable_match, #enable_leaderboard, #enable_friends, #new_friend, #toggle_list {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 	}
 
-	#Sniper-match-starbound {
+	#match-starbound {
 		text-align: center;
 		font-size: 15px;
 		height: 30px;
 		width: 45px;
 	}
 
-	#Sniper-new_friend {
+	#new_friend {
 		padding-top: 3px;
 	}
 
-	#Sniper-addfriend {
+	#addfriend {
 		text-align: center;
 		font-size: 15px;
 		height: 30px;
 		width: 90px;
 	}
 
-	.Sniper-table_row {
+	.table_row {
 		text_align: center;
 		display: table-row;
+		background-color: #333;
 	}
 
-	.Sniper-table_cell {
+	.table_cell {
 		text_align: center;
 		display: table-cell;
-		border: black solid 1px;
+		border: white solid 1px;
 		padding: 3px 3px 3px 3px;
 	}
 
-	.Sniper-header {
-		background-color: #CCC;
+	.header {
+		background-color: teal;
 	}
 
-	.Sniper-friendcell {
-		background-color: #BCF;
-		color: black;
+	.friendcell {
+		background-color: #004d4d;
+		color: white;
 	}
 
-	.Sniper-links {
-		color: black;
+	.links {
+		color: white;
 	}
 
-	#Sniper-titlelink {
+	#titlelink {
 		color: white;
 		text-shadow: 2px 2px teal;
 		font-family: Quicksand-Bold;
@@ -163,53 +167,53 @@ async function load_elements(){
 	document.body.appendChild(c);
 	let d = document.createElement("div");
 	d.innerHTML = `
-		<div id = "Sniper-all" hidden = "true">
-			<div id = "Sniper-title">
-				<a id = "Sniper-titlelink" href = "https://github.com/zzd233/Generals.io-1v1-match-helper" target = "_blank">Generals.io 1v1 match helper</a>
+		<div id = "all" hidden = "true">
+			<div id = "title">
+				<a id = "titlelink" href = "https://github.com/zzd233/Generals.io-1v1-match-helper" target = "_blank">Generals.io 1v1 match helper</a>
 			</div>
-			<div id = "Sniper-option">
-				<div id = "Sniper-range">
+			<div id = "option">
+				<div id = "range">
 					<div>
 						Finding range:
 					</div>
-					<div id = "Sniper-enable_leaderboard">
+					<div id = "enable_leaderboard">
 						<div>
 							&nbsp; Leaderboard: star ≥
 						</div>
-						<input id = "Sniper-match-starbound" placeholder = "inf"> &nbsp;
-						<div class = "Sniper-button" id = "Sniper-button2">OFF</div>
+						<input id = "match-starbound" placeholder = "inf"> &nbsp;
+						<div class = "button" id = "button2">OFF</div>
 					</div>
-					<div id = "Sniper-enable_friends">
+					<div id = "enable_friends">
 						<div>
 							&nbsp; Friends: &nbsp;
 						</div>
-						<div class = "Sniper-button" id = "Sniper-button3">OFF</div>
+						<div class = "button" id = "button3">OFF</div>
 					</div>
 				</div>
-				<div id = "Sniper-enable_match">
+				<div id = "enable_match">
 					<div>
 						Auto Match:&nbsp;
 					</div>
-					<div class = "Sniper-button" id = "Sniper-button1">OFF</div>
+					<div class = "button" id = "button1">OFF</div>
 				</div>
-				<div id = "Sniper-new_friend">
+				<div id = "new_friend">
 					<div>
 						Modify friend: &nbsp;
 					</div>
-					<input id = "Sniper-addfriend" placeholder = "someone"> &nbsp;
-					<div id = "Sniper-button4">
+					<input id = "addfriend" placeholder = "someone"> &nbsp;
+					<div id = "button4">
 						Add/Del
 					</div>
 				</div>
-				<div id = "Sniper-toggle_list">
+				<div id = "toggle_list">
 					<div>
 						Show list: &nbsp;
 					</div>
-					<div class = "Sniper-button" id = "Sniper-toggle">ON</div>
+					<div class = "button" id = "toggle">ON</div>
 				</div>
 			</div>
-			<div id = "Sniper-list">
-				<div id = "Sniper-list-table">
+			<div id = "list">
+				<div id = "list-table">
 
 				</div>
 			</div>
@@ -217,14 +221,14 @@ async function load_elements(){
 	`;
 	document.body.appendChild(d);
 }
-let main_div, button1, button2, button3, button4, option_element, list_element, toggle;
+let main_div, button1, button2, button3, button4, option_element, list_element;
 let match_starbound, addfriend;
 let list_table;
 let enable_match = false;
 let enable_leaderboard = false;
 let enable_friends = false;
 let friend_list = [];
-const Eps = 1e-3;
+const INTERVAL = 3000, Eps = 1e-3;
 let myname = undefined;
 let data = {};//store other's star and last 1v1 game time; example: data["zzd233"] = {star: 70.00, time: 1617360510077}
 let friend_dictionary = {};
@@ -242,10 +246,10 @@ function load_drag(box, callback = () => {}){
 		y = event.clientY;
 		isdrag = true;
 	}
-	box.onmousemove = (event) => {
+	document.onmousemove = (event) => {
 		if (!isdrag)
 			return;
-		// console.log(event.button);
+		//console.log(event.button);
 		event = event || window.event;
 		let dx = event.clientX - x;
 		let dy = event.clientY - y;
@@ -259,7 +263,7 @@ function load_drag(box, callback = () => {}){
 		box.style.top = int2px(ny);
 		callback();
 	}
-	box.onmouseup = (event) => {
+	document.onmouseup = (event) => {
 		isdrag = false;
 	}
 }
@@ -272,14 +276,14 @@ function main(){
 		await load_elements();
 		socket = io('https://ws.generals.io');
 		await waitConnect();
-		console.log('connected');
+		//console.log('connected');
 		function get_myname(){
 			let tmp = document.getElementById('main-menu-username-input');
 			if (tmp)
 				myname = tmp.value;
 		}
 		get_myname();
-		main_div = document.getElementById('Sniper-all');
+		main_div = document.getElementById('all');
 		let local_main_div_position = JSON.parse(localStorage.getItem("zzdscript_main_div_position"));
 		if (!local_main_div_position){
 			local_main_div_position = {x: 80, y: 70};
@@ -293,35 +297,35 @@ function main(){
 				y: px2int(main_div.style.top),
 			}));
 		});
-		button1 = document.getElementById('Sniper-button1');
-		button2 = document.getElementById('Sniper-button2');
-		button3 = document.getElementById('Sniper-button3');
-		button4 = document.getElementById('Sniper-button4');
-		toggle = document.getElementById('Sniper-toggle');
-		option_element = document.getElementById('Sniper-option');
-		list_element = document.getElementById('Sniper-list');
-		toggle.style.backgroundColor = "green";
+		button1 = document.getElementById('button1');
+		button2 = document.getElementById('button2');
+		button3 = document.getElementById('button3');
+		button4 = document.getElementById('button4');
+		toggle = document.getElementById('toggle');
+		option_element = document.getElementById('option');
+		list_element = document.getElementById('list');
+		toggle.style.backgroundColor = "teal";
 		if(window.localStorage["QUEUE_SNIPER_HIDE_LIST"] == "hide") {
 			toggle.textContent = "OFF";
 			list_element.style.display = "none";
-			toggle.style.backgroundColor = "red";
+			toggle.style.backgroundColor = "#333";
 		}
 		toggle.addEventListener('click', () => {
 			if(window.localStorage["QUEUE_SNIPER_HIDE_LIST"] == "hide") {
 				window.localStorage["QUEUE_SNIPER_HIDE_LIST"] = "show";
 				toggle.textContent = "ON";
 				list_element.style.display = "";
-				toggle.style.backgroundColor = "green";
+				toggle.style.backgroundColor = "teal";
 			} else {
 				window.localStorage["QUEUE_SNIPER_HIDE_LIST"] = "hide";
 				toggle.textContent = "OFF";
 				list_element.style.display = "none";
-				toggle.style.backgroundColor = "red";
+				toggle.style.backgroundColor = "#333";
 			}
 		});
-		match_starbound = document.getElementById("Sniper-match-starbound");
-		addfriend = document.getElementById("Sniper-addfriend");
-		list_table = document.getElementById("Sniper-list-table");
+		match_starbound = document.getElementById("match-starbound");
+		addfriend = document.getElementById("addfriend");
+		list_table = document.getElementById("list-table");
 		let settings = JSON.parse(localStorage.getItem("zzdscript_settings"));
 		if (!settings){
 			settings = [enable_match, enable_leaderboard, enable_friends, "50"];
@@ -330,24 +334,24 @@ function main(){
 		[enable_match, enable_leaderboard, enable_friends, match_starbound.value] = settings;
 		if (enable_match){
 			button1.innerHTML = "ON";
-			button1.style.backgroundColor = "green";
+			button1.style.backgroundColor = "teal";
 		} else {
 			button1.innerHTML = "OFF";
-			button1.style.backgroundColor = "red";
+			button1.style.backgroundColor = "#333";
 		}
 		if (enable_leaderboard){
 			button2.innerHTML = "ON";
-			button2.style.backgroundColor = "green";
+			button2.style.backgroundColor = "teal";
 		} else {
 			button2.innerHTML = "OFF";
-			button2.style.backgroundColor = "red";
+			button2.style.backgroundColor = "#333";
 		}
 		if (enable_friends){
 			button3.innerHTML = "ON";
-			button3.style.backgroundColor = "green";
+			button3.style.backgroundColor = "teal";
 		} else {
 			button3.innerHTML = "OFF";
-			button3.style.backgroundColor = "red";
+			button3.style.backgroundColor = "#333";
 		}
 		friend_list = JSON.parse(localStorage.getItem("zzdscript_Friends"));
 		if (!friend_list){
@@ -359,11 +363,11 @@ function main(){
 		button1.addEventListener('click', () => {
 			if (button1.innerHTML === "OFF"){
 				button1.innerHTML = "ON";
-				button1.style.backgroundColor = "green";
+				button1.style.backgroundColor = "teal";
 				enable_match = true;
 			} else {
 				button1.innerHTML = "OFF";
-				button1.style.backgroundColor = "red";
+				button1.style.backgroundColor = "#333";
 				enable_match = false;
 			}
 			settings = [enable_match, enable_leaderboard, enable_friends, match_starbound.value];
@@ -372,11 +376,11 @@ function main(){
 		button2.addEventListener('click', () => {
 			if (button2.innerHTML === "OFF"){
 				button2.innerHTML = "ON";
-				button2.style.backgroundColor = "green";
+				button2.style.backgroundColor = "teal";
 				enable_leaderboard = true;
 			} else {
 				button2.innerHTML = "OFF";
-				button2.style.backgroundColor = "red";
+				button2.style.backgroundColor = "#333";
 				enable_leaderboard = false;
 			}
 			settings = [enable_match, enable_leaderboard, enable_friends, match_starbound.value];
@@ -385,11 +389,11 @@ function main(){
 		button3.addEventListener('click', () => {
 			if (button3.innerHTML === "OFF"){
 				button3.innerHTML = "ON";
-				button3.style.backgroundColor = "green";
+				button3.style.backgroundColor = "teal";
 				enable_friends = true;
 			} else {
 				button3.innerHTML = "OFF";
-				button3.style.backgroundColor = "red";
+				button3.style.backgroundColor = "#333";
 				enable_friends = false;
 			}
 			settings = [enable_match, enable_leaderboard, enable_friends, match_starbound.value];
@@ -420,152 +424,30 @@ function main(){
 		let real_time = Number(new Date($.ajax({async:false}).getResponseHeader("Date")));
 		let system_time = Number(new Date());
 		time_delta = real_time - system_time;
-		console.log(`time_delta = `, time_delta);
+		//console.log(time_delta);
         setInterval(async () => {
             let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
-			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
+			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel") && !main_div.hidden){
 				main_div.hidden = true;
 			}
         }, 100);
-		let tasks = 0, time_0 = undefined, friend_list_loaded = false;
-		let players_from_leaderboard, bound;
-		let count_tasks_n0 = 0, last_tasks = -1;
-		let main_interval = setInterval(async () => {
-			if (tasks !== 0 && last_tasks === tasks)
-				count_tasks_n0 ++;
-			else
-				count_tasks_n0 = 0;
-			if (count_tasks_n0 > 500) {
-				// clearInterval(main_interval);
-				tasks = count_tasks_n0 = 0;
-			}
-			last_tasks = tasks;
-			// console.log(tasks);
-			if (tasks < 0) {
-				clearInterval(main_interval);
-				throw "tasks < 0";
-			}
-			if (tasks > 0)
-				return;
-			if (time_0 !== undefined){
-				let now = Number(new Date()) + time_delta;
-				if (now - time_0 > 1500)
-					console.log(new Date(), `fetch: time = ${now - time_0}`);
-				let pool = [];
-				if (enable_friends)
-					for (let name of friend_list){
-						pool.push({
-							name: name,
-							star: data[name].star,
-							time_past: isNaN(data[name].time) ? NaN : now - data[name].time,
-							isfriend: true,
-							type: data[name].type,
-						});
-					}
-				if (enable_leaderboard){
-					for (let name of players_from_leaderboard){
-						if (!name)
-							continue;
-						if ((friend_dictionary[name] === true && enable_friends) || !data[name] || !(data[name].star > bound) || name === myname)
-							continue;
-						if (isNaN(data[name].time) || now - data[name].time > 1000 * 60 * 30)
-							continue;
-						pool.push({
-							name: name,
-							star: data[name].star,
-							time_past: isNaN(data[name].time) ? NaN : now - data[name].time,
-							isfriend: false,
-							type: data[name].type,
-						});
-					}
-				}
-				pool.sort((a, b) => {
-					let [x, y] = [a.time_past, b.time_past];
-					if (isNaN(x) && isNaN(y)) {
-						return b.star - a.star;
-					}
-					if (isNaN(x) !== isNaN(y))
-						return isNaN(x) ? 1 : -1;
-					return x - y;
-				});
-				let htmlstring = `
-					<div class = "Sniper-table_row">
-						<div class = "Sniper-table_cell Sniper-header">
-							name
-						</div>
-						<div class = "Sniper-table_cell Sniper-header">
-							star
-						</div>
-						<div class = "Sniper-table_cell Sniper-header">
-							last
-						</div>
-					</div>
-				`;
-				function time_past_to_string(t){
-					if (isNaN(t))
-						return "";
-					t = Math.floor(t / 1000);
-					if (t < 60)
-						return `${t}s`;
-					else if (t < 3600)
-						return `${Math.floor(t/60)}m`;
-					else
-						return `${(t/3600).toFixed(1)}h`;
-				}
-				for (let user of pool){
-					htmlstring += `
-						<div class = "Sniper-table_row">
-							<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
-								<a class = "Sniper-links" href = "https://generals.io/profiles/${encodeURIComponent(user.name)}" target = "_blank">${user.name}</a>
-							</div>
-							<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
-								${user.star}
-							</div>
-							<div class = "Sniper-table_cell ${user.isfriend ? "Sniper-friendcell" : ""}">
-								${isNaN(user.time_past) ? user.type : time_past_to_string(user.time_past)}
-							</div>
-						</div>
-					`;
-				}
-				list_table.innerHTML = htmlstring;
-				if (enable_match && pool.length > 0){
-					let t = pool[0];
-					if (t.time_past < 8000){
-						console.log("join 1v1!");
-						try { clickButton('play'); } catch (e) { }
-						try { clickButton('1v1'); } catch (e) { }
-						try { clickButton('play again'); } catch (e) { }
-						button1.innerHTML = "OFF";
-						button1.style.backgroundColor = "red";
-						enable_match = false;
-						setTimeout(() => {
-							try {
-								clickButton('cancel');
-								button1.innerHTML = "ON";
-								button1.style.backgroundColor = "green";
-								enable_match = true;
-							} catch (e){}
-						}, 8000);
-					}
-				}
-			}
+		setInterval(async () => {
 			let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
 			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
-				main_div.hidden = true;
-				time_0 = undefined;
+				if (!main_div.hidden) {
+					main_div.hidden = true;
+				}
 				return;
 			}
 			main_div.hidden = false;
-			time_0 = Number(new Date()) + time_delta;
 			get_myname();
-			function update_player(name, current_star){
+			let tasks = 0;
+			async function update_player(name, current_star){
 				if (data[name] != undefined && abs(current_star - data[name].star) < 0.01)
 					return;
 				else {
-					// console.log("name = ",name,"star = ",current_star, data[name]);
-					tasks+=100;
-					let task_id = Number(new Date())%100000;
-					// console.log(`+${task_id}, ${tasks}`);
+					//console.log("name = ",name,"star = ",current_star, data[name]);
+					tasks++;
 					let url = 'https://generals.io/api/replaysForUsername?u=' + encodeURIComponent(name) + '&offset=0&count=1';
 					fetch(url).then(tmp => {
 						return tmp.json();
@@ -585,32 +467,26 @@ function main(){
 							else if (tmp.type === 'custom')
 								data[name].type = CUSTOM;
 						}
-						tasks-=100;
-						// console.log(`-${task_id}, ${tasks}`);
+						tasks--;
 					});
 				}
 			}
 			settings = [enable_match, enable_leaderboard, enable_friends, match_starbound.value];
 			localStorage.setItem('zzdscript_settings',JSON.stringify(settings));
-			bound = parseFloat(match_starbound.value);
+			let bound = parseFloat(match_starbound.value);
 			if (isNaN(bound))
 				bound = Infinity;
 			bound -= Eps;
-			players_from_leaderboard = [];
-			tasks+=10000;
-			let task_id = Number(new Date())%100000;
-			// console.log(`+${task_id}, ${tasks}`);
+			let players_from_leaderboard = [];
+			tasks++;
 			socket.emit('leaderboard', 'duel', (res) => {
-				// console.log(res);
+				// //console.log(res);
 				let stars = res.stars, users = res.users;
-				if (enable_friends || !friend_list_loaded){
-					friend_list_loaded = true;
+				if (enable_friends){
 					for (let name of friend_list){
 						let index = users.findIndex(x => x === name);
 						if (index === -1){
 							tasks++;
-							let task_id = Number(new Date())%100000;
-							// console.log(`+${task_id}, ${tasks}`);
 							let url = 'https://generals.io/api/starsAndRanks?u=' + encodeURIComponent(name);
 							fetch(url).then(tmp => {
 								return tmp.json();
@@ -620,7 +496,6 @@ function main(){
 									star = 0;
 								update_player(name, star);
 								tasks--;
-								// console.log(`-${task_id}, ${tasks}`);
 							});
 						} else {
 							update_player(name, parseFloat(stars[index]).toFixed(2));
@@ -641,22 +516,128 @@ function main(){
 									data[users[i]] = {star: parseFloat(stars[i]).toFixed(2), time: NaN, type: NOREPLAY};
 							}
 						}
-					} else {
-						const step = 2;
-						leaderboard_cnt += step;
-						for (let i = 0; i < stars.length; i++) {
-							if (users[i] && (friend_dictionary[users[i]] !== true || !enable_friends)){
-								if (leaderboard_cnt - step <= i && i < leaderboard_cnt)
-									data[users[i]] = undefined;
-								update_player(users[i], parseFloat(stars[i]).toFixed(2));
-							}
+						tasks--;
+						return;
+					}
+					const step = 2;
+					leaderboard_cnt += step;
+					for (let i = 0; i < stars.length; i++) {
+						if (users[i] && (friend_dictionary[users[i]] !== true || !enable_friends)){
+							if (leaderboard_cnt - step < i && i <= leaderboard_cnt)
+								data[users[i]] = undefined;
+							update_player(users[i], parseFloat(stars[i]).toFixed(2));
 						}
 					}
 				}
-				tasks-=10000;
-				// console.log(`-${task_id}, ${tasks}`);
+				tasks--;
 			});
-		}, 100);
+			let time_0 = Number(new Date()) + time_delta;
+			let checkfetchendinterval = setInterval(()=>{
+				if (tasks == 0){
+					clearInterval(checkfetchendinterval);
+					let now = Number(new Date()) + time_delta;
+					//console.log(`fetch: time = ${now - time_0}`);
+					let pool = [];
+					if (enable_friends)
+						for (let name of friend_list){
+							pool.push({
+								name: name,
+								star: data[name].star,
+								time_past: isNaN(data[name].time) ? NaN : now - data[name].time,
+								isfriend: true,
+								type: data[name].type,
+							});
+						}
+					if (enable_leaderboard){
+						for (let name of players_from_leaderboard){
+							if (!name)
+								continue;
+							if ((friend_dictionary[name] === true && enable_friends) || !data[name] || !(data[name].star > bound) || name === myname)
+								continue;
+							if (isNaN(data[name].time) || now - data[name].time > 1000 * 60 * 30)
+								continue;
+							pool.push({
+								name: name,
+								star: data[name].star,
+								time_past: isNaN(data[name].time) ? NaN : now - data[name].time,
+								isfriend: false,
+								type: data[name].type,
+							});
+						}
+					}
+					pool.sort((a, b) => {
+						let [x, y] = [a.time_past, b.time_past];
+						if (isNaN(x) && isNaN(y)) {
+							return b.star - a.star;
+						}
+						if (isNaN(x) !== isNaN(y))
+							return isNaN(x) ? 1 : -1;
+						return x - y;
+					});
+					let htmlstring = `
+						<div class = "table_row">
+							<div class = "table_cell header">
+								name
+							</div>
+							<div class = "table_cell header">
+								star
+							</div>
+							<div class = "table_cell header">
+								last
+							</div>
+						</div>
+					`;
+					function time_past_to_string(t){
+						if (isNaN(t))
+							return "";
+						t = Math.floor(t / 1000);
+						if (t < 60)
+							return `${t}s`;
+						else if (t < 3600)
+							return `${Math.floor(t/60)}m`;
+						else
+							return `${(t/3600).toFixed(1)}h`;
+					}
+					for (let user of pool){
+						htmlstring += `
+							<div class = "table_row">
+								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
+									<a class = "links" href = "https://generals.io/profiles/${encodeURIComponent(user.name)}" target = "_blank">${user.name}</a>
+								</div>
+								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
+									${user.star}
+								</div>
+								<div class = "table_cell ${user.isfriend ? "friendcell" : ""}">
+									${isNaN(user.time_past) ? user.type : time_past_to_string(user.time_past)}
+								</div>
+							</div>
+						`;
+					}
+					list_table.innerHTML = htmlstring;
+					if (enable_match && pool.length > 0){
+						let t = pool[0];
+						if (t.time_past < INTERVAL + 7000){
+							//console.log("join 1v1!");
+							try { clickButton('play'); } catch (e) { }
+							try { clickButton('1v1'); } catch (e) { }
+							try { clickButton('play again'); } catch (e) { }
+							button1.innerHTML = "OFF";
+							button1.style.backgroundColor = "#333";
+							enable_match = false;
+							setTimeout(() => {
+								try {
+									clickButton('cancel');
+									button1.innerHTML = "ON";
+									button1.style.backgroundColor = "teal";
+									enable_match = true;
+								} catch (e){}
+							}, 10000);
+						}
+					}
+					return;
+				}
+			}, 333);
+		}, INTERVAL);
 	}, 1000);
 };
 
