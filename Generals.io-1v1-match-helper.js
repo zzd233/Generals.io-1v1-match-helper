@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generals.io 1v1 match helper
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  A tool for 1v1 to get stars
 // @author       zzd233
 // @match        https://generals.io/
@@ -423,7 +423,7 @@ function main(){
 		console.log(`time_delta = `, time_delta);
         setInterval(async () => {
             let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
-			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
+			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel") && !main_div.hidden){
 				main_div.hidden = true;
 			}
         }, 100);
@@ -551,7 +551,9 @@ function main(){
 			}
 			let buttons = Array.from(document.getElementsByTagName('button')).map(a => a.innerHTML);
 			if (!buttons.find(a => a === "PLAY" || a === "1v1" || a === "Play Again" || a === "Cancel")){
-				main_div.hidden = true;
+				if (!main_div.hidden) {
+					main_div.hidden = true;
+				}
 				time_0 = undefined;
 				return;
 			}
