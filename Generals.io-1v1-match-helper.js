@@ -265,7 +265,7 @@ function load_drag(box, callback = () => {}){
 }
 function main(){
 	setTimeout(async () => {
-		let lib_socket = 'https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js';
+		let lib_socket = 'https://cdn.jsdelivr.net/npm/socket.io-client@4/dist/socket.io.js';
 		let lib_jquery = 'https://code.jquery.com/jquery-3.6.0.min.js';
 		await load(lib_socket);
 		await load(lib_jquery);
